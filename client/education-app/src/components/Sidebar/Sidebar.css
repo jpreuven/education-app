@@ -1,6 +1,7 @@
 .sidebar-inner-div {
   height: 100dvh;
-  width: 260px;
+  width: 300px;
+  /* width: 260px; */
   background-color: #5794f7;
   flex-shrink: 0;
   position: sticky;
@@ -81,7 +82,8 @@
 @media (max-width: 800px) {
   .sidebar-inner-div {
     position: absolute;
-    left: -260px;
+    /* left: -260px; */
+    left: -300px;
   }
   .sidebar-outer-div {
     position: sticky;
