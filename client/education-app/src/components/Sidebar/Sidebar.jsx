@@ -3,7 +3,7 @@ import "./Sidebar.css";
 // import logo from "../../images/ProperlyManagementSolutionsLogo.jpg";
 import { useSelector } from "react-redux";
 import { SideBarDataJSX } from "./Sidebar.data";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SideBar() {
   const mobileSidebarIsOpen = useSelector(
@@ -25,12 +25,12 @@ export default function SideBar() {
         <ul className="sidebar-link-list" id="sidebar-botton-link-list">
           <li className="sidebar-links">
             <div className="sidebar-links-div">
-              <a href="/testing">Settings</a>
+              <Link to="/testing">Settings</Link>
             </div>
           </li>
           <li className="sidebar-links">
             <div className="sidebar-links-div">
-              <a href="/testing">Account Info</a>
+              <Link to="/testing1">Account Info</Link>
             </div>
           </li>
         </ul>
