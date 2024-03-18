@@ -18,7 +18,7 @@ export default function SideBarNavBar() {
     <nav
       className="sidebar-navbar"
       style={{
-        backgroundColor: mobileSidebarIsOpen ? "#001730" : "#002043",
+        backgroundColor: "#5794f7",
       }}
     >
       <input

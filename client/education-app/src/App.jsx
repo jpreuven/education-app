@@ -111,18 +111,18 @@ function App() {
       {user ? <Sidebar /> : null}
       <div className="app-inner-route-div" style={innerDivStyle}>
         <SideBarNavBar />
-        <Router>
-          <Routes>
-            {user ? (
-              <>
-                <Route path="/" element={<Home />} />
-                <Route path="/classes" element={<Classes />} />
-              </>
-            ) : (
-              <Route path="/" element={<AuthorizationPage />} />
-            )}
-          </Routes>
-        </Router>
+        {/* <Router> */}
+        <Routes>
+          {user ? (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/classes" element={<Classes />} />
+            </>
+          ) : (
+            <Route path="/" element={<AuthorizationPage />} />
+          )}
+        </Routes>
+        {/* </Router> */}
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ const SideBarDataJSX = SideBarData.map((link, index) => {
   return (
     <li key={index} className="sidebar-links">
       <div className="sidebar-links-div">
-        <a href={`${link.href}`}>{link.title}</a>
+        <Link to={`${link.href}`}>{link.title}</Link>
       </div>
     </li>
   );
