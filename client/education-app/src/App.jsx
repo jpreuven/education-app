@@ -14,7 +14,6 @@ function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  console.log("testing");
 
   const mobileSidebarIsOpen = useSelector(
     (state) => state.mobileSidebarIsOpen.value
