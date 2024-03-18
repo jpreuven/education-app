@@ -6,6 +6,12 @@
   position: sticky;
   top: 0;
   overflow-y: auto;
+  box-shadow: 0 4px 4px 0 rgba(60, 64, 67, 0.3),
+    0 8px 12px 6px rgba(60, 64, 67, 0.15);
+  transition: left 0.5s ease;
+}
+.sidebar-inner-div.sidebar-inner-div-reopen {
+  left: 0;
 }
 
 /* Allowing scrolling without scrollbar */
@@ -74,7 +80,8 @@
 
 @media (max-width: 800px) {
   .sidebar-inner-div {
-    display: none;
+    position: absolute;
+    left: -260px;
   }
   .sidebar-outer-div {
     position: sticky;
@@ -89,7 +96,8 @@
     padding: 10px 30px;
     z-index: 2;
     background-color: #5794f7;
-    border-bottom: 1px solid black;
+    box-shadow: 0 4px 4px 0 rgba(60, 64, 67, 0.3),
+      0 8px 12px 6px rgba(60, 64, 67, 0.15);
   }
   input[type="checkbox"] {
     display: none;

@@ -9,7 +9,6 @@ export default function SideBar() {
   const mobileSidebarIsOpen = useSelector(
     (state) => state.mobileSidebarIsOpen.value
   );
-  console.log(mobileSidebarIsOpen);
 
   return (
     <div className="sidebar-outer-div">
