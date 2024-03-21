@@ -6,24 +6,24 @@ import { setUser } from "../../app/features/users/userSlice";
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // function handleLogout() {
-  //   fetch("http://localhost:5000/logout", {
-  //     method: "DELETE",
-  //     credentials: "include",
-  //   })
-  //     .then((r) => {
-  //       if (r.ok) {
-  //         console.log("User logged out!");
-  //         navigate("/");
-  //         dispatch(setUser(null));
-  //       } else {
-  //         console.log("Something went wrong!");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error logging out:", error);
-  //     });
-  // }
+  function handleLogout() {
+    fetch("http://localhost:5000/logout", {
+      method: "DELETE",
+      credentials: "include",
+    })
+      .then((r) => {
+        if (r.ok) {
+          console.log("User logged out!");
+          navigate("/");
+          dispatch(setUser(null));
+        } else {
+          console.log("Something went wrong!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error logging out:", error);
+      });
+  }
   return (
     <div>
       Home
@@ -139,7 +139,7 @@ export default function Home() {
         magnam quis maxime, labore alias enim. Quod culpa nesciunt, provident
         dignissimos assumenda beatae modi!
       </div>
-      {/* <button onClick={handleLogout}>Logout</button> */}
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 }

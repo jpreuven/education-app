@@ -9,6 +9,8 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Classes from "./pages/Classes/Classes";
 import SideBarNavBar from "./components/SideBarNavBar/SideBarNavBar";
 import { setMobileSidebarIsOpen } from "./app/features/mobileSidebarIsOpen/mobileSidebarIsOpenSlice";
+import NavBar from "./components/NewNavBar/NavBar";
+import SideBar from "./components/NewSideBar/NewSideBar";
 
 function App() {
   const dispatch = useDispatch();
@@ -93,25 +95,29 @@ function App() {
   const outerDivStyle = user
     ? {
         display: "flex",
+        flexDirection: "column",
       }
     : null;
 
   const innerDivStyle = user
     ? {
         display: "flex",
-        flexDirection: "column",
-        "@media (minHeight: 800px)": {
-          flexDirection: "row",
-        },
+        // flexDirection: "column",
+        // "@media (minHeight: 800px)": {
+        //   flexDirection: "row",
+        // },
       }
     : null;
 
   return (
     <div className="app-outer-route-div" style={outerDivStyle}>
-      {user ? <Sidebar /> : null}
+      {user ? <NavBar /> : null}
       <div className="app-inner-route-div" style={innerDivStyle}>
-        <SideBarNavBar />
+        {/* <SideBarNavBar /> */}
         {/* <Router> */}
+        {/* <NavBar /> */}
+        {/* {mobileSidebarIsOpen ? <SideBar /> : null} */}
+        <SideBar />
         <Routes>
           {user ? (
             <>

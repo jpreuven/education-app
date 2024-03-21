@@ -1,9 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "../Sidebar/Sidebar.css";
+// import "../Sidebar/Sidebar.css";
+import "./NavBar.css";
 import { setMobileSidebarIsOpen } from "../../app/features/mobileSidebarIsOpen/mobileSidebarIsOpenSlice";
 
-export default function SideBarNavBar() {
+export default function NavBar() {
   const mobileSidebarIsOpen = useSelector(
     (state) => state.mobileSidebarIsOpen.value
   );
@@ -16,7 +17,7 @@ export default function SideBarNavBar() {
 
   return (
     <nav
-      className="sidebar-navbar"
+      className="navbar"
       style={{
         backgroundColor: "#fff",
       }}
@@ -27,7 +28,7 @@ export default function SideBarNavBar() {
         checked={mobileSidebarIsOpen}
         onChange={toggleSidebar}
       />
-      <label htmlFor="sidebar-checkbox-toggle" className="sidebar-hamburger">
+      <label htmlFor="sidebar-checkbox-toggle" className="navbar-hamburger">
         &#9776;
       </label>
     </nav>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-// import "./Sidebar.css";
+import "./NewSideBar.css";
 // import logo from "../../images/ProperlyManagementSolutionsLogo.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { SideBarDataJSX, SideBarLowerDataJSX } from "./Sidebar.data";
+import { SideBarDataJSX, SideBarLowerDataJSX } from "../Sidebar/Sidebar.data";
 import { setUser } from "../../app/features/users/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -33,18 +33,14 @@ export default function SideBar() {
   }
 
   return (
-    <div className="sidebar-outer-div">
+    <div className="new-sidebar-outer-div">
       <nav
-        className={`sidebar-inner-div ${
-          mobileSidebarIsOpen ? "sidebar-inner-div-reopen" : ""
+        className={`new-sidebar-inner-div ${
+          mobileSidebarIsOpen ? "new-sidebar-inner-div-reopen" : ""
         }`}
       >
-        <div className="sidebar-logo-div">
-          <img alt="sidebar-logo" id="sidebar-logo" />
-          {/* <img src={logo} alt="sidebar-logo" id="sidebar-logo" /> */}
-        </div>
-        <ul className="sidebar-link-list">{SideBarDataJSX}</ul>
-        <ul className="sidebar-link-list" id="sidebar-botton-link-list">
+        <ul className="new-sidebar-link-list">{SideBarDataJSX}</ul>
+        <ul className="new-sidebar-link-list" id="new-sidebar-bottom-link-list">
           {/* <li className="sidebar-links">
             <div className="sidebar-links-div">
               <Link to="/testing">Settings</Link>
@@ -63,6 +59,7 @@ export default function SideBar() {
             </div>
           </li> */}
           {SideBarLowerDataJSX}
+          {/* <li>yo</li> */}
         </ul>
       </nav>
     </div>

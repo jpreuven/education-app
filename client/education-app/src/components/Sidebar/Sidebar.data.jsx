@@ -48,13 +48,17 @@ const SideBarDataJSX = SideBarData.map(({ href, title, logo }, index) => {
     position: "relative",
     zIndex: "-1",
     left: "0",
+    color: "#3c4043",
+    fontFamily: "Google Sans",
+    fontSize: "14px",
+    fontWeight: "600",
   };
   if (!logo) {
     sideBarLinkStyle["left"] = "-10px";
   }
   return (
-    <li key={index} className="sidebar-links">
-      <div className="sidebar-links-div">
+    <li key={index} className="new-sidebar-links">
+      <div className="new-sidebar-links-div">
         <Link to={`${href}`}>
           <div style={{ display: "flex" }}>
             <p style={sideBarLinkStyle}>{title}</p>
@@ -69,11 +73,21 @@ const SideBarDataJSX = SideBarData.map(({ href, title, logo }, index) => {
 const SideBarLowerDataJSX = SideBarLowerData.map(
   ({ href, title, logo }, index) => {
     return (
-      <li key={index} className="sidebar-links">
-        <div className="sidebar-links-div">
+      <li key={index} className="new-sidebar-links">
+        <div className="new-sidebar-links-div">
           <Link to={`${href}`}>
             <div style={{ display: "flex" }}>
-              <p style={{ flexGrow: "2" }}>{title}</p>
+              <p
+                style={{
+                  flexGrow: "2",
+                  color: "#3c4043",
+                  fontFamily: "Google Sans",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                }}
+              >
+                {title}
+              </p>
               <img src={logo} style={{ width: "20px" }} />
             </div>
           </Link>
