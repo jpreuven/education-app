@@ -82,3 +82,11 @@ class UserByID(Resource):
             return {"message": "401: Not Authorized"}, 401
 api.add_resource(UserByID, "/users/<int:id>")
 
+class Students(Resource):
+    def get(self):
+        print("worked?")
+        students = [student.to_dict() for student in Student.query.all()]
+
+        return make_response(students, 200)
+    
+api.add_resource(Students, "/students")
