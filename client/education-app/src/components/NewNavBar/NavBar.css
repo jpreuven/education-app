@@ -1,0 +1,30 @@
+.navbar {
+  display: flex;
+  color: black;
+  position: sticky;
+  top: 0;
+  padding: 10px 30px;
+  z-index: 2;
+  /* box-shadow: 0 4px 4px 0 rgba(60, 64, 67, 0.3),
+    0 8px 12px 6px rgba(60, 64, 67, 0.15); */
+  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+  height: 64px;
+  box-sizing: border-box;
+  align-items: center;
+}
+input[type="checkbox"] {
+  display: none;
+}
+
+.navbar-hamburger {
+  font-size: 24px;
+  user-select: none;
+  color: #3c4043;
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .navbar-hamburger {
+    display: block;
+  }
+}
