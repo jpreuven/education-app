@@ -105,3 +105,11 @@ class Courses(Resource):
         return make_response(courses, 200)
     
 api.add_resource(Courses, "/courses")
+
+# class Enrollments(Resource):
+#     def get(self):
+#         enrollments = [enrollments.to_dict() for enrollments in Enrollment.query.all()]
+
+#         return make_response(enrollments, 200)
+    
+# api.add_resource(Enrollments, "/enrollments")
