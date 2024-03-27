@@ -45,12 +45,21 @@ function App() {
   const user = useSelector((state) => state.user.value);
 
   function makeScreenUnusableMobileSidebar(e) {
-    dispatch(setMobileSidebarIsOpen(!mobileSidebarIsOpen));
+    if (
+      !e.target.className.includes("new-sidebar-inner-div") &&
+      !e.target.className.includes("new-sidebar-link-list") &&
+      !e.target.className.includes("new-sidebar-links")
+      // &&!e.target.className.includes("new-sidebar-links-div")
+    ) {
+      dispatch(setMobileSidebarIsOpen(!mobileSidebarIsOpen));
+    }
+    console.log(e.target.className);
   }
 
   useEffect(() => {
     if (mobileSidebarIsOpen) {
       const appOuterRouteDiv = document.querySelector(".app-inner-route-div");
+      const navBar = document.querySelector(".navbar");
 
       if (appOuterRouteDiv) {
         appOuterRouteDiv.addEventListener(
@@ -58,14 +67,21 @@ function App() {
           makeScreenUnusableMobileSidebar
         );
       }
+      if (navBar) {
+        navBar.addEventListener("click", makeScreenUnusableMobileSidebar);
+      }
     } else {
       const appOuterRouteDiv = document.querySelector(".app-inner-route-div");
+      const navBar = document.querySelector(".navbar");
 
       if (appOuterRouteDiv) {
         appOuterRouteDiv.removeEventListener(
           "click",
           makeScreenUnusableMobileSidebar
         );
+      }
+      if (navBar) {
+        navBar.removeEventListener("click", makeScreenUnusableMobileSidebar);
       }
     }
   }, [mobileSidebarIsOpen]);
