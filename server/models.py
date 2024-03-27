@@ -39,16 +39,25 @@ class User(db.Model, SerializerMixin):
 class Student(User):
     __tablename__ = 'students'
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    serialize_rules = ('-_password_hash',)
+    enrollments = db.relationship("Enrollment", back_populates="student", cascade="delete")
+    courses = association_proxy("enrollments", "course")
+
+    serialize_rules = ('-_password_hash','-enrollments')
 
     __mapper_args__ = {
         'polymorphic_identity': 'student',
     }
 
+    def to_dict(self, include_courses=True):
+        student_dict = super().to_dict()
+        if include_courses:
+            student_dict['courses'] = [course.to_dict(include_students=False) for course in self.courses]
+        return student_dict
+
 
 class Teacher(User):
     __tablename__ = 'teachers'
-    serialize_rules = ('-_password_hash','-teacher_course_association', )
+    serialize_rules = ('-_password_hash','-teacher_course_association' )
 
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     teacher_course_association = db.relationship("TeacherCourseAssociation", back_populates="teacher", cascade="delete")
@@ -66,7 +75,7 @@ class Teacher(User):
 
 class Course(db.Model, SerializerMixin):
     __tablename__ = 'courses'
-    serialize_rules = ('-teacher_course_association',)
+    serialize_rules = ('-teacher_course_association','-enrollments')
 
     course_id = db.Column(db.Integer, primary_key=True)
     course_title = db.Column(db.String(100), nullable=False)
@@ -75,11 +84,15 @@ class Course(db.Model, SerializerMixin):
     end_date = db.Column(db.Date, nullable=False)
     teacher_course_association = db.relationship("TeacherCourseAssociation", back_populates="course", cascade="delete") 
     teachers = association_proxy("teacher_course_association", "teacher")
+    enrollments = db.relationship("Enrollment", back_populates="course", cascade="delete") 
+    students = association_proxy("enrollments", "student")
     
-    def to_dict(self, include_teachers=True):
+    def to_dict(self, include_teachers=True, include_students=True):
         course_dict = super().to_dict()
         if include_teachers:
             course_dict['teachers'] = [teacher.to_dict(include_courses=False) for teacher in self.teachers]
+        if include_students:
+            course_dict['students'] = [student.to_dict(include_courses=False) for student in self.students]
         return course_dict
 
 
@@ -100,6 +113,8 @@ class Enrollment(db.Model, SerializerMixin):
     student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
     enrollment_date = db.Column(db.Date, nullable=False)
+    student = db.relationship("Student", back_populates="enrollments")
+    course = db.relationship("Course", back_populates="enrollments")
 
 class Assignment(db.Model, SerializerMixin):
     __tablename__ = 'assignments'
