@@ -66,7 +66,6 @@ api.add_resource(Logout, "/logout")
 
 class Users(Resource):
     def get(self):
-        print("worked?")
         users = [user.to_dict() for user in User.query.all()]
 
         return make_response(users, 200)
@@ -82,3 +81,27 @@ class UserByID(Resource):
             return {"message": "401: Not Authorized"}, 401
 api.add_resource(UserByID, "/users/<int:id>")
 
+class Students(Resource):
+    def get(self):
+        students = [student.to_dict() for student in Student.query.all()]
+
+        return make_response(students, 200)
+    
+api.add_resource(Students, "/students")
+
+
+class Teachers(Resource):
+    def get(self):
+        teachers = [teacher.to_dict() for teacher in Teacher.query.all()]
+
+        return make_response(teachers, 200)
+    
+api.add_resource(Teachers, "/teachers")
+
+class Courses(Resource):
+    def get(self):
+        courses = [courses.to_dict() for courses in Course.query.all()]
+
+        return make_response(courses, 200)
+    
+api.add_resource(Courses, "/courses")
