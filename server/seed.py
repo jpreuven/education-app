@@ -68,8 +68,8 @@ def seed_users():
     db.session.commit()
 
     # Create sample teacher course associations
-    association1 = TeacherCourseAssociation(section_title='Section A', teacher_id=teacher1.teacher_id, course_id=course1.course_id)
-    association2 = TeacherCourseAssociation(section_title='Section B', teacher_id=teacher1.teacher_id, course_id=course2.course_id)
+    association1 = TeacherCourseAssociation( teacher_id=teacher1.teacher_id, course_id=course1.course_id)
+    association2 = TeacherCourseAssociation( teacher_id=teacher1.teacher_id, course_id=course2.course_id)
 
     # Add associations to the session
     db.session.add(association1)
