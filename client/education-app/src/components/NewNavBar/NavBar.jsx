@@ -11,7 +11,6 @@ export default function NavBar() {
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
-    console.log(mobileSidebarIsOpen);
     dispatch(setMobileSidebarIsOpen(!mobileSidebarIsOpen));
   };
 

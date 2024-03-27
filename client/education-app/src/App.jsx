@@ -53,7 +53,7 @@ function App() {
     ) {
       dispatch(setMobileSidebarIsOpen(!mobileSidebarIsOpen));
     }
-    console.log(e.target.className);
+    // console.log(e.target.className);
   }
 
   useEffect(() => {
@@ -129,11 +129,7 @@ function App() {
     <div className="app-outer-route-div" style={outerDivStyle}>
       {user ? <NavBar /> : null}
       <div className="app-inner-route-div" style={innerDivStyle}>
-        {/* <SideBarNavBar /> */}
-        {/* <Router> */}
-        {/* <NavBar /> */}
-        {/* {mobileSidebarIsOpen ? <SideBar /> : null} */}
-        <SideBar />
+        {user ? <SideBar /> : null}
         <Routes>
           {user ? (
             <>
@@ -144,7 +140,6 @@ function App() {
             <Route path="/" element={<AuthorizationPage />} />
           )}
         </Routes>
-        {/* </Router> */}
       </div>
     </div>
   );

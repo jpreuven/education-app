@@ -39,27 +39,33 @@ class User(db.Model, SerializerMixin):
 class Student(User):
     __tablename__ = 'students'
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+
     enrollments = db.relationship("Enrollment", back_populates="student", cascade="delete")
     courses = association_proxy("enrollments", "course")
 
-    serialize_rules = ('-_password_hash','-enrollments')
+    submissions = db.relationship("Submission", back_populates="student", cascade="delete")
+    assignments = association_proxy("submissions", "assignment")
+
+    serialize_rules = ('-_password_hash','-enrollments', '-submissions')
 
     __mapper_args__ = {
         'polymorphic_identity': 'student',
     }
 
-    def to_dict(self, include_courses=True):
+    def to_dict(self, include_courses=True, include_assignments=True):
         student_dict = super().to_dict()
         if include_courses:
             student_dict['courses'] = [course.to_dict(include_students=False) for course in self.courses]
+        if include_assignments:
+            student_dict['assignments'] = [assignment.to_dict(include_students=False) for assignment in self.assignments]
         return student_dict
 
 
 class Teacher(User):
     __tablename__ = 'teachers'
     serialize_rules = ('-_password_hash','-teacher_course_association' )
-
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    
     teacher_course_association = db.relationship("TeacherCourseAssociation", back_populates="teacher", cascade="delete")
     courses = association_proxy("teacher_course_association", "course")
     
@@ -82,8 +88,10 @@ class Course(db.Model, SerializerMixin):
     description = db.Column(db.Text, nullable=False)
     start_date = db.Column(db.Date, nullable=False)
     end_date = db.Column(db.Date, nullable=False)
+
     teacher_course_association = db.relationship("TeacherCourseAssociation", back_populates="course", cascade="delete") 
     teachers = association_proxy("teacher_course_association", "teacher")
+
     enrollments = db.relationship("Enrollment", back_populates="course", cascade="delete") 
     students = association_proxy("enrollments", "student")
     
@@ -118,16 +126,33 @@ class Enrollment(db.Model, SerializerMixin):
 
 class Assignment(db.Model, SerializerMixin):
     __tablename__ = 'assignments'
+    serialize_rules = ('-submissions',)
+    # serialize_rules = ('-teacher_course_association','-enrollments')
+
     assignment_id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     due_date = db.Column(db.Date, nullable=False)
 
+    submissions = db.relationship("Submission", back_populates="assignment", cascade="delete") 
+    students = association_proxy("submissions", "student")
+
+    def to_dict(self, include_students=True):
+        assignment_dict = super().to_dict()
+        if include_students:
+            assignment_dict['students'] = [student.to_dict(include_courses=False) for student in self.students]
+        return assignment_dict
+
 class Submission(db.Model, SerializerMixin):
     __tablename__ = 'submissions'
+    serialize_rules = ('-student.submissions', '-assignment.submissions')
+
+
     submission_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignments.assignment_id'), nullable=False)
     submission_date = db.Column(db.Date, nullable=False)
     files = db.Column(db.String(255), nullable=False)
+    student = db.relationship("Student", back_populates="submissions")
+    assignment = db.relationship("Assignment", back_populates="submissions")
