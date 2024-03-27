@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import "./Sidebar.css";
 // import logo from "../../images/ProperlyManagementSolutionsLogo.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { SideBarDataJSX, SideBarLowerDataJSX } from "./Sidebar.data";
+// import { SideBarDataJSX } from "./Sidebar.data";
 import { setUser } from "../../app/features/users/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -62,7 +62,6 @@ export default function SideBar() {
               </Link>
             </div>
           </li> */}
-          {SideBarLowerDataJSX}
         </ul>
       </nav>
     </div>
