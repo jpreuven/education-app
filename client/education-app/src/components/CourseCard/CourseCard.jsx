@@ -9,9 +9,15 @@ export default function CourseCard({
   return (
     <div
       style={{
-        maxWidth: "300px",
-        boxShadow: "0px 0px 7px 0px lightgray",
+        // maxWidth: "350px",
+        // width: "80%",
+        // maxWidth: "18.75rem",
+        // maxHeight: "200px",
+        height: "18.375rem",
+        // boxShadow: "0px 0px 7px 0px lightgray",
+        border: "2px solid rgba(0, 0, 0, 0.12)",
         borderRadius: "10px",
+        padding: "1rem",
       }}
     >
       <h2>{course_title}</h2>

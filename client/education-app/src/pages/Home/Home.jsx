@@ -1,31 +1,8 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setUser } from "../../app/features/users/userSlice";
+import { useSelector } from "react-redux";
 import CourseCard from "../../components/CourseCard/CourseCard";
 
 export default function Home() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  function handleLogout() {
-    fetch("http://localhost:5000/logout", {
-      method: "DELETE",
-      credentials: "include",
-    })
-      .then((r) => {
-        if (r.ok) {
-          console.log("User logged out!");
-          navigate("/");
-          dispatch(setUser(null));
-        } else {
-          console.log("Something went wrong!");
-        }
-      })
-      .catch((error) => {
-        console.error("Error logging out:", error);
-      });
-  }
-
   const userData = useSelector((state) => state.user.value);
   console.log(userData);
   const coursesJSX = userData.courses.map(
@@ -42,5 +19,22 @@ export default function Home() {
     }
   );
 
-  return <div>{coursesJSX}</div>;
+  return (
+    <section
+      style={{
+        padding: "1.5rem 0 0 1.5rem",
+        // padding: "1.5rem",
+        // display: "flex",
+        // justifyContent: "flex-start",
+        // alignContent: "flex-start",
+        // gap: "3rem",
+        // flexWrap: "wrap",
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        gap: "1rem",
+      }}
+    >
+      {coursesJSX}
+    </section>
+  );
 }
