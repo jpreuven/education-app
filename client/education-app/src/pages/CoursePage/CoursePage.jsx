@@ -1,9 +1,16 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { setUser } from "../../app/features/users/userSlice";
 
 export default function Course() {
+  const [assignmentFormToggle, setAssignmentFormToggle] = useState(false);
+  const [assignmentDescription, setAssignmentDescription] = useState("");
+  const [assignmentTitle, setAssignmentTitle] = useState("");
+  const [assignmentDate, setAssignmentDate] = useState("");
+
   const { id } = useParams();
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.value);
   const {
     assignments,
@@ -38,6 +45,39 @@ export default function Course() {
     }
   );
 
+  function handleNewAssignment(e) {
+    e.preventDefault();
+    const obj = {
+      description: assignmentDescription,
+      title: assignmentTitle,
+      due_date: assignmentDate,
+      course_id: id,
+    };
+    fetch("http://localhost:5000/assignments", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    }).then((r) => {
+      if (r.ok) {
+        r.json().then((data) => {
+          const new_user = { ...userData };
+          new_user.courses
+            .filter((course) => {
+              return course.course_id == id;
+            })
+            .filter((assignment) => {
+              return assignment.course_id == id;
+            })
+            .push(data);
+          console.log(new_user);
+        });
+      }
+    });
+  }
+
   return (
     <div>
       <h1>{course_title}</h1>
@@ -48,6 +88,42 @@ export default function Course() {
       <div>{studentList}</div>
       <div>Assignments here:</div>
       <div>{assignmentList}</div>
+      <button
+        onClick={() => {
+          setAssignmentFormToggle(!assignmentFormToggle);
+        }}
+      >
+        Make a new assignment
+      </button>
+      {assignmentFormToggle ? (
+        <div>
+          {" "}
+          <form onSubmit={handleNewAssignment}>
+            <label htmlFor="assignment-form-description">Description</label>
+            <input
+              type="text"
+              id="assignment-form-description"
+              value={assignmentDescription}
+              onChange={(e) => setAssignmentDescription(e.target.value)}
+            ></input>
+            <label htmlFor="assignment-form-title">Title</label>
+            <input
+              type="text"
+              id="assignment-form-title"
+              value={assignmentTitle}
+              onChange={(e) => setAssignmentTitle(e.target.value)}
+            ></input>
+            <label htmlFor="assignment-form-date">Due Date</label>
+            <input
+              type="date"
+              id="assignment-form-date"
+              value={assignmentDate}
+              onChange={(e) => setAssignmentDate(e.target.value)}
+            ></input>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      ) : null}
     </div>
   );
 }

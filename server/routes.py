@@ -1,6 +1,8 @@
 from models import *
 from flask import request, make_response, session, abort
 from flask_restful import Resource
+from datetime import datetime
+
 
 from app import app, db, api
 
@@ -111,6 +113,24 @@ class Assignments(Resource):
         assignments = [assignments.to_dict() for assignments in Assignment.query.all()]
 
         return make_response(assignments, 200)
+    def post(self):
+        data = request.get_json()
+        description = data["description"]
+        title = data["title"]
+        date  = data["due_date"]
+        year = int(date[0:4])
+        month = int(date[5:7])
+        day = int(date[8:10])
+        due_date = datetime(year, month, day)
+        course_id = data["course_id"]
+        try:
+            new_assignment = Assignment(course_id=course_id, title=title, description=description, due_date=due_date)
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_assignment)
+        db.session.commit()
+        return make_response(new_assignment.to_dict(), 201)
+
     
 api.add_resource(Assignments, "/assignments")
 

@@ -44,6 +44,7 @@ class Student(User):
     courses = association_proxy("enrollments", "course")
 
     submissions = db.relationship("Submission", back_populates="student", cascade="delete")
+    # Think about switching this to "submitted_assignments" as this will only populate once submissions occur
     assignments = association_proxy("submissions", "assignment")
 
     serialize_rules = ('-_password_hash','-enrollments', '-submissions')
