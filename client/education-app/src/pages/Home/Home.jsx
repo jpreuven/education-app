@@ -34,7 +34,8 @@ export default function Home() {
         // No idea what these do:
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-        gridTemplateRows: "min-content",
+        // gridTemplateRows: "min-content",
+        gridTemplateRows: "max-content",
 
         gap: "1rem",
       }}

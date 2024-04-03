@@ -81,7 +81,7 @@ class Teacher(User):
 
 class Course(db.Model, SerializerMixin):
     __tablename__ = 'courses'
-    serialize_rules = ('-teacher_course_association','-enrollments')
+    serialize_rules = ('-teacher_course_association','-enrollments', '-assignments.course')
 
     course_id = db.Column(db.Integer, primary_key=True)
     course_title = db.Column(db.String(100), nullable=False)
@@ -94,6 +94,9 @@ class Course(db.Model, SerializerMixin):
 
     enrollments = db.relationship("Enrollment", back_populates="course", cascade="delete") 
     students = association_proxy("enrollments", "student")
+
+    assignments = db.relationship("Assignment", back_populates="course", cascade="delete") 
+
     
     def to_dict(self, include_teachers=True, include_students=True):
         course_dict = super().to_dict()
@@ -126,7 +129,7 @@ class Enrollment(db.Model, SerializerMixin):
 
 class Assignment(db.Model, SerializerMixin):
     __tablename__ = 'assignments'
-    serialize_rules = ('-submissions',)
+    serialize_rules = ('-submissions', '-course.assignments')
     # serialize_rules = ('-teacher_course_association','-enrollments')
 
     assignment_id = db.Column(db.Integer, primary_key=True)
@@ -137,6 +140,9 @@ class Assignment(db.Model, SerializerMixin):
 
     submissions = db.relationship("Submission", back_populates="assignment", cascade="delete") 
     students = association_proxy("submissions", "student")
+
+    course = db.relationship("Course", back_populates="assignments")
+
 
     def to_dict(self, include_students=True):
         assignment_dict = super().to_dict()
