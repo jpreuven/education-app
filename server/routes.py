@@ -130,9 +130,30 @@ class Assignments(Resource):
         db.session.add(new_assignment)
         db.session.commit()
         return make_response(new_assignment.to_dict(), 201)
-
     
 api.add_resource(Assignments, "/assignments")
+
+class TeacherNotes(Resource):
+    def get(self):
+        teacher_notes = [teacher_notes.to_dict() for teacher_notes in TeacherNote.query.all()]
+
+        return make_response(teacher_notes, 200)
+    def post(self):
+        data = request.get_json()
+        teacher_id = data["teacher_id"]
+        course_id = data["course_id"]
+        note_text = data["note_text"]
+        try:
+            new_teacher_note = TeacherNote(course_id=course_id, teacher_id=teacher_id, note_text=note_text)
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_teacher_note)
+        db.session.commit()
+        return make_response(new_teacher_note.to_dict(), 201)
+    
+api.add_resource(TeacherNotes, "/teachernotes")
+
+
 
 
 # class Enrollments(Resource):

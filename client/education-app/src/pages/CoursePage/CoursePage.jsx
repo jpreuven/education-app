@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { setUser } from "../../app/features/users/userSlice";
 
 export default function Course() {
-  const [assignmentFormToggle, setAssignmentFormToggle] = useState(false);
+  const [assignmentFormToggle, setAssignmentFormToggle] = useState(true);
   const [assignmentDescription, setAssignmentDescription] = useState("");
   const [assignmentTitle, setAssignmentTitle] = useState("");
   const [assignmentDate, setAssignmentDate] = useState("");
@@ -63,16 +63,19 @@ export default function Course() {
     }).then((r) => {
       if (r.ok) {
         r.json().then((data) => {
-          const new_user = { ...userData };
+          const new_user = JSON.parse(JSON.stringify(userData));
           new_user.courses
             .filter((course) => {
               return course.course_id == id;
-            })
-            .filter((assignment) => {
-              return assignment.course_id == id;
-            })
-            .push(data);
-          console.log(new_user);
+            })[0]
+            .assignments.push({
+              assignment_id: data.assignment_id,
+              course_id: id,
+              description: data.description,
+              description: data.title,
+              due_date: data.due_date,
+            });
+          dispatch(setUser(new_user));
         });
       }
     });

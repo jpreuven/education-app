@@ -47,6 +47,8 @@ class Student(User):
     # Think about switching this to "submitted_assignments" as this will only populate once submissions occur
     assignments = association_proxy("submissions", "assignment")
 
+    student_notes = db.relationship("StudentNote", back_populates="student", cascade="delete")
+
     serialize_rules = ('-_password_hash','-enrollments', '-submissions')
 
     __mapper_args__ = {
@@ -69,6 +71,9 @@ class Teacher(User):
     
     teacher_course_association = db.relationship("TeacherCourseAssociation", back_populates="teacher", cascade="delete")
     courses = association_proxy("teacher_course_association", "course")
+    
+    teacher_notes = db.relationship("TeacherNote", back_populates="teacher", cascade="delete")
+
     
     __mapper_args__ = {
         'polymorphic_identity': 'teacher',
@@ -97,6 +102,10 @@ class Course(db.Model, SerializerMixin):
     students = association_proxy("enrollments", "student")
 
     assignments = db.relationship("Assignment", back_populates="course", cascade="delete") 
+
+    student_notes = db.relationship("StudentNote", back_populates="course", cascade="delete") 
+    teacher_notes = db.relationship("TeacherNote", back_populates="course", cascade="delete") 
+
 
     
     def to_dict(self, include_teachers=True, include_students=True):
@@ -155,7 +164,6 @@ class Submission(db.Model, SerializerMixin):
     __tablename__ = 'submissions'
     serialize_rules = ('-student.submissions', '-assignment.submissions')
 
-
     submission_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignments.assignment_id'), nullable=False)
@@ -163,3 +171,27 @@ class Submission(db.Model, SerializerMixin):
     files = db.Column(db.String(255), nullable=False)
     student = db.relationship("Student", back_populates="submissions")
     assignment = db.relationship("Assignment", back_populates="submissions")
+
+class StudentNote(db.Model, SerializerMixin):
+    __tablename__ = "student_notes"
+    serialize_rules = ('-student.student_notes', '-course.student_notes')
+
+    note_id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
+    note_text = db.Column(db.String, nullable=False)
+    student = db.relationship("Student", back_populates="student_notes")
+    course = db.relationship("Course", back_populates="student_notes")
+
+class TeacherNote(db.Model, SerializerMixin):
+    __tablename__ = "teacher_notes"
+    serialize_rules = ('-teacher.teacher_notes', '-course.teacher_notes')
+
+    note_id = db.Column(db.Integer, primary_key=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.teacher_id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
+    note_text = db.Column(db.String, nullable=False)
+    teacher = db.relationship("Teacher", back_populates="teacher_notes")
+    course = db.relationship("Course", back_populates="teacher_notes")
+
+
