@@ -6,7 +6,7 @@ export default function Home() {
   const userData = useSelector((state) => state.user.value);
   console.log(userData);
   const coursesJSX = userData.courses.map(
-    ({ course_title, description, end_date, start_date }, index) => {
+    ({ course_title, description, end_date, start_date, ...data }, index) => {
       return (
         <CourseCard
           key={index}
@@ -14,6 +14,7 @@ export default function Home() {
           description={description}
           end_date={end_date}
           start_date={start_date}
+          data={data}
         />
       );
     }
@@ -29,8 +30,12 @@ export default function Home() {
         // alignContent: "flex-start",
         // gap: "3rem",
         // flexWrap: "wrap",
+
+        // No idea what these do:
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        gridTemplateRows: "min-content",
+
         gap: "1rem",
       }}
     >

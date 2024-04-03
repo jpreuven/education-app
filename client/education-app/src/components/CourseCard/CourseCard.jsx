@@ -1,11 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CourseCard({
   course_title,
   description,
   end_date,
   start_date,
+  data,
 }) {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate(`/course/${data.course_id}`);
+  }
   return (
     <div
       style={{
@@ -19,6 +26,7 @@ export default function CourseCard({
         borderRadius: "10px",
         padding: "1rem",
       }}
+      onClick={handleClick}
     >
       <h2>{course_title}</h2>
       <p>{description}</p>

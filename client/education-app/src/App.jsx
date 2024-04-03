@@ -6,7 +6,7 @@ import "./App.css";
 import Home from "./pages/Home/Home";
 import AuthorizationPage from "./pages/Authorization/Authorization";
 import Sidebar from "./components/Sidebar/Sidebar";
-import Classes from "./pages/Classes/Classes";
+import CoursePage from "./pages/CoursePage/CoursePage";
 import SideBarNavBar from "./components/SideBarNavBar/SideBarNavBar";
 import { setMobileSidebarIsOpen } from "./app/features/mobileSidebarIsOpen/mobileSidebarIsOpenSlice";
 import NavBar from "./components/NewNavBar/NavBar";
@@ -134,7 +134,8 @@ function App() {
           {user ? (
             <>
               <Route path="/" element={<Home />} />
-              <Route path="/classes" element={<Classes />} />
+              {/* <Route path="/courses" element={<Courses />} /> */}
+              <Route path="/course/:id" element={<CoursePage />} />
             </>
           ) : (
             <Route path="/" element={<AuthorizationPage />} />
