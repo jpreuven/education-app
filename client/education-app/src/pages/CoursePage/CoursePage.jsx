@@ -9,6 +9,9 @@ export default function Course() {
   const [assignmentTitle, setAssignmentTitle] = useState("");
   const [assignmentDate, setAssignmentDate] = useState("");
 
+  const [noteFormToggle, setNoteFormToggle] = useState(true);
+  const [noteText, setNoteText] = useState("");
+
   const { id } = useParams();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.value);
@@ -19,6 +22,7 @@ export default function Course() {
     start_date,
     end_date,
     students,
+    teacher_notes,
   } = userData.courses.filter((course) => {
     return course.course_id == id;
   })[0];
@@ -44,6 +48,13 @@ export default function Course() {
       );
     }
   );
+  const teacherNotesList = teacher_notes.map(({ note_text }, index) => {
+    return (
+      <div key={index}>
+        <p>{note_text}</p>
+      </div>
+    );
+  });
 
   function handleNewAssignment(e) {
     e.preventDefault();
@@ -72,9 +83,43 @@ export default function Course() {
               assignment_id: data.assignment_id,
               course_id: id,
               description: data.description,
-              description: data.title,
+              title: data.title,
               due_date: data.due_date,
             });
+          dispatch(setUser(new_user));
+        });
+      }
+    });
+  }
+  function handleNewNote(e) {
+    e.preventDefault();
+    const obj = {
+      teacher_id: userData.id,
+      course_id: id,
+      note_text: noteText,
+    };
+    fetch("http://localhost:5000/teachernotes", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    }).then((r) => {
+      if (r.ok) {
+        r.json().then((data) => {
+          const new_user = JSON.parse(JSON.stringify(userData));
+          new_user.courses
+            .filter((course) => {
+              return course.course_id == id;
+            })[0]
+            .teacher_notes.push({
+              note_id: data.note_id,
+              teacher_id: data.teacher_id,
+              course_id: id,
+              note_text: data.note_text,
+            });
+          console.log(new_user);
           dispatch(setUser(new_user));
         });
       }
@@ -91,6 +136,8 @@ export default function Course() {
       <div>{studentList}</div>
       <div>Assignments here:</div>
       <div>{assignmentList}</div>
+      <div>Notes here:</div>
+      <div>{teacherNotesList}</div>
       <button
         onClick={() => {
           setAssignmentFormToggle(!assignmentFormToggle);
@@ -100,7 +147,6 @@ export default function Course() {
       </button>
       {assignmentFormToggle ? (
         <div>
-          {" "}
           <form onSubmit={handleNewAssignment}>
             <label htmlFor="assignment-form-description">Description</label>
             <input
@@ -123,6 +169,26 @@ export default function Course() {
               value={assignmentDate}
               onChange={(e) => setAssignmentDate(e.target.value)}
             ></input>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      ) : null}
+      {noteFormToggle ? (
+        <div>
+          <form onSubmit={handleNewNote}>
+            <label htmlFor="note-form-description">Description</label>
+            <textarea
+              type="text"
+              id="note-form-description"
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+            ></textarea>
+            {/* <input
+              type="text"
+              id="note-form-description"
+              value={noteText}
+              onChange={(e) => setNoteText(e.target.value)}
+            ></input> */}
             <button type="submit">Submit</button>
           </form>
         </div>
