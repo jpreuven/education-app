@@ -27,35 +27,6 @@ export default function Course() {
     return course.course_id == id;
   })[0];
 
-  const studentList = students.map(
-    ({ email, first_name, last_name }, index) => {
-      return (
-        <h3 key={index}>
-          {first_name} {last_name}
-        </h3>
-      );
-    }
-  );
-
-  const assignmentList = assignments.map(
-    ({ description, title, due_date }, index) => {
-      return (
-        <div key={index}>
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <p>Due date: {due_date}</p>
-        </div>
-      );
-    }
-  );
-  const teacherNotesList = teacher_notes.map(({ note_text }, index) => {
-    return (
-      <div key={index}>
-        <p>{note_text}</p>
-      </div>
-    );
-  });
-
   function handleNewAssignment(e) {
     e.preventDefault();
     const obj = {
@@ -126,16 +97,72 @@ export default function Course() {
     });
   }
 
+  const studentList = students.map(
+    ({ email, first_name, last_name }, index) => {
+      return (
+        <div
+          key={index}
+          style={{ paddingBlock: "1em", borderBottom: "1px solid black" }}
+        >
+          <p>
+            {first_name} {last_name}
+          </p>
+        </div>
+      );
+    }
+  );
+
+  const assignmentList = assignments.map(
+    ({ description, title, due_date }, index) => {
+      return (
+        <div key={index}>
+          <h4>{title}</h4>
+          <p>{description}</p>
+          <p>Due date: {due_date}</p>
+        </div>
+      );
+    }
+  );
+  const teacherNotesList = teacher_notes.map(({ note_text }, index) => {
+    return (
+      <div key={index}>
+        <p>{note_text}</p>
+      </div>
+    );
+  });
+
   return (
-    <div>
-      <h1>{course_title}</h1>
-      <p>{description}</p>
-      <p>
-        Start Date: {start_date} - End Date: {end_date}
-      </p>
-      <div>{studentList}</div>
-      <div>Assignments here:</div>
-      <div>{assignmentList}</div>
+    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <div>
+        <h1>{course_title}</h1>
+        <p>{description}</p>
+        <p>
+          Start Date: {start_date} - End Date: {end_date}
+        </p>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <h3>Assignments here:</h3>
+          <div>{assignmentList}</div>
+        </div>
+        <div
+          style={{
+            maxWidth: "300px",
+            width: "100%",
+            maxHeight: "400px",
+          }}
+        >
+          <h3>Students:</h3>
+          <div
+            style={{
+              height: "100%",
+              border: "2px solid rgb(224, 224, 224)",
+            }}
+          >
+            {studentList}
+          </div>
+        </div>
+      </div>
       <div>Notes here:</div>
       <div>{teacherNotesList}</div>
       <button
@@ -173,6 +200,13 @@ export default function Course() {
           </form>
         </div>
       ) : null}
+      <button
+        onClick={() => {
+          setNoteFormToggle(!noteFormToggle);
+        }}
+      >
+        New Notes
+      </button>
       {noteFormToggle ? (
         <div>
           <form onSubmit={handleNewNote}>
@@ -183,12 +217,6 @@ export default function Course() {
               value={noteText}
               onChange={(e) => setNoteText(e.target.value)}
             ></textarea>
-            {/* <input
-              type="text"
-              id="note-form-description"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-            ></input> */}
             <button type="submit">Submit</button>
           </form>
         </div>
