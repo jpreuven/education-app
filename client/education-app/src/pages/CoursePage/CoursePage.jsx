@@ -2,15 +2,22 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setUser } from "../../app/features/users/userSlice";
+import accountLogo from "../../assets/account-logo.svg";
+import arrowRightLogo from "../../assets/arrow_right_logo.svg";
+import arrowDropLogo from "../../assets/arrow_drop_logo.svg";
+import addLogo from "../../assets/add_logo.svg";
+
+import "./CoursePage.css";
 
 export default function Course() {
   const [assignmentFormToggle, setAssignmentFormToggle] = useState(true);
   const [assignmentDescription, setAssignmentDescription] = useState("");
   const [assignmentTitle, setAssignmentTitle] = useState("");
   const [assignmentDate, setAssignmentDate] = useState("");
-
   const [noteFormToggle, setNoteFormToggle] = useState(true);
   const [noteText, setNoteText] = useState("");
+  const [expandAssignmentList, setExpandAssignmentList] = useState(true);
+  const [expandNoteList, setExpandNoteList] = useState(true);
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -96,14 +103,32 @@ export default function Course() {
       }
     });
   }
+  function handleAssignmentListToggle() {
+    setExpandAssignmentList(!expandAssignmentList);
+  }
+  function handleNoteListToggle() {
+    setExpandNoteList(!expandNoteList);
+  }
 
   const studentList = students.map(
     ({ email, first_name, last_name }, index) => {
       return (
         <div
           key={index}
-          style={{ paddingBlock: "1em", borderBottom: "1px solid black" }}
+          style={{
+            paddingBlock: ".65em",
+            border: "1px solid rgb(224,224,224)",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+          }}
         >
+          <img
+            src={accountLogo}
+            style={{
+              paddingRight: "15px",
+            }}
+          />
           <p>
             {first_name} {last_name}
           </p>
@@ -115,112 +140,247 @@ export default function Course() {
   const assignmentList = assignments.map(
     ({ description, title, due_date }, index) => {
       return (
-        <div key={index}>
-          <h4>{title}</h4>
-          <p>{description}</p>
-          <p>Due date: {due_date}</p>
+        <div
+          className="course-page-list-item-div"
+          key={index}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: ".5em",
+            borderTop: index == 0 ? "none" : "1px solid rgb(224, 224, 224)",
+          }}
+        >
+          <p style={{ font: "20px", fontWeight: "bold" }}>{title}</p>
+          <p style={{ font: "12px" }}>{due_date}</p>
         </div>
       );
     }
   );
   const teacherNotesList = teacher_notes.map(({ note_text }, index) => {
     return (
-      <div key={index}>
-        <p>{note_text}</p>
+      <div
+        className="course-page-list-item-div"
+        key={index}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: ".5em",
+          borderTop: index == 0 ? "none" : "1px solid rgb(224, 224, 224)",
+        }}
+      >
+        <p style={{ font: "20px", fontWeight: "bold" }}>{note_text}</p>
       </div>
     );
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        padding: "30px",
+        justifyContent: "space-between",
+      }}
+    >
       <div>
-        <h1>{course_title}</h1>
-        <p>{description}</p>
-        <p>
-          Start Date: {start_date} - End Date: {end_date}
-        </p>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>
-          <h3>Assignments here:</h3>
-          <div>{assignmentList}</div>
-        </div>
+        {/* Heading */}
         <div
           style={{
-            maxWidth: "300px",
-            width: "100%",
-            maxHeight: "400px",
+            marginBottom: "10px",
           }}
         >
-          <h3>Students:</h3>
+          <h1>{course_title}</h1>
+          <p>{description}</p>
+          <p>
+            Start Date: {start_date} - End Date: {end_date}
+          </p>
+        </div>
+        {/* Assignment + notes lists */}
+        <div
+          style={{
+            border: "2px solid rgb(224, 224, 224)",
+            marginBottom: "10px",
+          }}
+        >
+          {/* Assignment Header */}
           <div
             style={{
-              height: "100%",
-              border: "2px solid rgb(224, 224, 224)",
+              borderBottom: expandAssignmentList
+                ? "2px solid rgb(224, 224, 224)"
+                : "none ",
+              padding: "0.5em",
+              backgroundColor: "#F5F5F5",
+              display: "flex",
+              justifyContent: "space-between",
+              userSelect: "none",
             }}
           >
-            {studentList}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={handleAssignmentListToggle}
+            >
+              <img
+                src={expandAssignmentList ? arrowDropLogo : arrowRightLogo}
+              />
+              <h3>Assignments</h3>
+            </div>
+            {/* Create new assignment button */}
+            <button
+              className="course-page-button"
+              onClick={() => {
+                setAssignmentFormToggle(!assignmentFormToggle);
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                  width: "85px",
+                }}
+              >
+                <img src={addLogo} />
+                Create
+              </div>
+            </button>
+            {/* {assignmentFormToggle ? (
+              <div>
+                <form onSubmit={handleNewAssignment}>
+                  <label htmlFor="assignment-form-description">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    id="assignment-form-description"
+                    value={assignmentDescription}
+                    onChange={(e) => setAssignmentDescription(e.target.value)}
+                  ></input>
+                  <label htmlFor="assignment-form-title">Title</label>
+                  <input
+                    type="text"
+                    id="assignment-form-title"
+                    value={assignmentTitle}
+                    onChange={(e) => setAssignmentTitle(e.target.value)}
+                  ></input>
+                  <label htmlFor="assignment-form-date">Due Date</label>
+                  <input
+                    type="date"
+                    id="assignment-form-date"
+                    value={assignmentDate}
+                    onChange={(e) => setAssignmentDate(e.target.value)}
+                  ></input>
+                  <button type="submit">Submit</button>
+                </form>
+              </div>
+            ) : null} */}
+          </div>
+          {/* Assignment List */}
+          <div
+            style={{
+              display: expandAssignmentList ? "flex" : "none",
+              flexDirection: "column",
+            }}
+          >
+            {assignmentList}
           </div>
         </div>
+        {/* Note Header */}
+        <div
+          style={{
+            border: "2px solid rgb(224, 224, 224)",
+            marginBottom: "10px",
+          }}
+        >
+          <div
+            style={{
+              borderBottom: expandNoteList
+                ? "2px solid rgb(224, 224, 224)"
+                : "none ",
+              padding: "0.5em",
+              backgroundColor: "#F5F5F5",
+              display: "flex",
+              userSelect: "none",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div
+              style={{ display: "flex", cursor: "pointer" }}
+              onClick={handleNoteListToggle}
+            >
+              <img src={expandNoteList ? arrowDropLogo : arrowRightLogo} />
+              <h3>Notes</h3>
+            </div>
+            {/* Note Button */}
+            <button
+              className="course-page-button"
+              onClick={() => {
+                setNoteFormToggle(!noteFormToggle);
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                  width: "85px",
+                }}
+              >
+                <img src={addLogo} />
+                Create
+              </div>
+            </button>
+          </div>
+          {/* Note List */}
+          <div
+            style={{
+              display: expandNoteList ? "flex" : "none",
+              flexDirection: "column",
+            }}
+          >
+            {teacherNotesList}
+          </div>
+          {/* {noteFormToggle ? (
+            <div>
+              <form onSubmit={handleNewNote}>
+                <label htmlFor="note-form-description">Description</label>
+                <textarea
+                  type="text"
+                  id="note-form-description"
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                ></textarea>
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+          ) : null} */}
+        </div>
       </div>
-      <div>Notes here:</div>
-      <div>{teacherNotesList}</div>
-      <button
-        onClick={() => {
-          setAssignmentFormToggle(!assignmentFormToggle);
+      <div
+        style={{
+          maxWidth: "300px",
+          width: "100%",
+          maxHeight: "400px",
         }}
       >
-        Make a new assignment
-      </button>
-      {assignmentFormToggle ? (
-        <div>
-          <form onSubmit={handleNewAssignment}>
-            <label htmlFor="assignment-form-description">Description</label>
-            <input
-              type="text"
-              id="assignment-form-description"
-              value={assignmentDescription}
-              onChange={(e) => setAssignmentDescription(e.target.value)}
-            ></input>
-            <label htmlFor="assignment-form-title">Title</label>
-            <input
-              type="text"
-              id="assignment-form-title"
-              value={assignmentTitle}
-              onChange={(e) => setAssignmentTitle(e.target.value)}
-            ></input>
-            <label htmlFor="assignment-form-date">Due Date</label>
-            <input
-              type="date"
-              id="assignment-form-date"
-              value={assignmentDate}
-              onChange={(e) => setAssignmentDate(e.target.value)}
-            ></input>
-            <button type="submit">Submit</button>
-          </form>
+        <h3>Students:</h3>
+        <div
+          style={{
+            height: "100%",
+            border: "2px solid rgb(224, 224, 224)",
+            overflow: "auto",
+            scrollbarWidth: "thin",
+          }}
+        >
+          {studentList}
+          {studentList}
         </div>
-      ) : null}
-      <button
-        onClick={() => {
-          setNoteFormToggle(!noteFormToggle);
-        }}
-      >
-        New Notes
-      </button>
-      {noteFormToggle ? (
-        <div>
-          <form onSubmit={handleNewNote}>
-            <label htmlFor="note-form-description">Description</label>
-            <textarea
-              type="text"
-              id="note-form-description"
-              value={noteText}
-              onChange={(e) => setNoteText(e.target.value)}
-            ></textarea>
-            <button type="submit">Submit</button>
-          </form>
-        </div>
-      ) : null}
+      </div>
     </div>
   );
 }
