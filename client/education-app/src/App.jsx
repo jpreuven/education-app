@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "./app/features/users/userSlice";
+import { setAssignmentFormDropdown } from "./app/features/assignmentFormDropdown/assignmentFormDropdownSlice";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home/Home";
 import AuthorizationPage from "./pages/Authorization/Authorization";
-import Sidebar from "./components/Sidebar/Sidebar";
 import CoursePage from "./pages/CoursePage/CoursePage";
-import SideBarNavBar from "./components/SideBarNavBar/SideBarNavBar";
 import { setMobileSidebarIsOpen } from "./app/features/mobileSidebarIsOpen/mobileSidebarIsOpenSlice";
 import NavBar from "./components/NewNavBar/NavBar";
 import SideBar from "./components/NewSideBar/NewSideBar";
@@ -19,6 +18,10 @@ function App() {
 
   const mobileSidebarIsOpen = useSelector(
     (state) => state.mobileSidebarIsOpen.value
+  );
+
+  const assignmentFormDropdown = useSelector(
+    (state) => state.assignmentFormDropdown.value
   );
 
   function getUser(e) {
@@ -125,8 +128,22 @@ function App() {
       }
     : null;
 
+  function toggleOffAssignmentList(e) {
+    // Toggle off assignment list if click outside of the assignment list
+    if (
+      assignmentFormDropdown &&
+      !e.target.className.includes("assignment-list")
+    ) {
+      dispatch(setAssignmentFormDropdown(false));
+    }
+  }
+
   return (
-    <div className="app-outer-route-div" style={outerDivStyle}>
+    <div
+      className="app-outer-route-div"
+      style={outerDivStyle}
+      onClick={toggleOffAssignmentList}
+    >
       {user ? <NavBar /> : null}
       <div className="app-inner-route-div" style={innerDivStyle}>
         {user ? <SideBar /> : null}
@@ -134,7 +151,6 @@ function App() {
           {user ? (
             <>
               <Route path="/" element={<Home />} />
-              {/* <Route path="/courses" element={<Courses />} /> */}
               <Route path="/course/:id" element={<CoursePage />} />
             </>
           ) : (

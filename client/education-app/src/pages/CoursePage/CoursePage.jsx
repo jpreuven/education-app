@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setUser } from "../../app/features/users/userSlice";
+import { setAssignmentFormDropdown } from "../../app/features/assignmentFormDropdown/assignmentFormDropdownSlice";
 import accountLogo from "../../assets/account-logo.svg";
 import arrowRightLogo from "../../assets/arrow_right_logo.svg";
 import arrowDropLogo from "../../assets/arrow_drop_logo.svg";
@@ -22,6 +23,9 @@ export default function Course() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.value);
+  const assignmentFormDropdown = useSelector(
+    (state) => state.assignmentFormDropdown.value
+  );
   const {
     assignments,
     course_title,
@@ -172,6 +176,9 @@ export default function Course() {
       </div>
     );
   });
+  function test() {
+    dispatch(setAssignmentFormDropdown(!assignmentFormDropdown));
+  }
 
   return (
     <div
@@ -181,6 +188,11 @@ export default function Course() {
         width: "100%",
         padding: "30px",
         justifyContent: "space-between",
+      }}
+      onClick={() => {
+        // if (assignmentFormToggle) {
+        //   setAssignmentFormToggle(false);
+        // }
       }}
     >
       <div>
@@ -214,6 +226,7 @@ export default function Course() {
               display: "flex",
               justifyContent: "space-between",
               userSelect: "none",
+              position: "relative",
             }}
           >
             <div
@@ -230,12 +243,7 @@ export default function Course() {
               <h3>Assignments</h3>
             </div>
             {/* Create new assignment button */}
-            <button
-              className="course-page-button"
-              onClick={() => {
-                setAssignmentFormToggle(!assignmentFormToggle);
-              }}
-            >
+            <button className="course-page-button" onClick={test}>
               <div
                 style={{
                   display: "flex",
@@ -248,6 +256,14 @@ export default function Course() {
                 Create
               </div>
             </button>
+            {assignmentFormDropdown ? (
+              <div className="assignment-list">
+                <div className="assignment-list-item">Classwork</div>
+                <div className="assignment-list-item">Homework</div>
+                <div className="assignment-list-item">Quiz</div>
+                <div className="assignment-list-item">Test</div>
+              </div>
+            ) : null}
             {/* {assignmentFormToggle ? (
               <div>
                 <form onSubmit={handleNewAssignment}>
