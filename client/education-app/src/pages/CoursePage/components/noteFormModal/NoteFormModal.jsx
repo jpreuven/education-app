@@ -40,7 +40,7 @@ export default function NoteFormModal({ handleNewNoteToggle }) {
             id="note-form-bottom-submit-button"
             type="submit"
           >
-            Submit
+            Create
           </button>
         </div>
       </div>
