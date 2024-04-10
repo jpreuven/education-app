@@ -1,0 +1,87 @@
+.note-form-modal-outer-div {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+}
+
+.note-form-modal-inner-div {
+  position: fixed;
+  width: 325px;
+  height: 200px;
+  top: 200px;
+  left: calc(50% - 162.5px);
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.note-form-modal-header {
+  font: bolder;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.note-form-modal-cancel {
+  cursor: pointer;
+}
+
+#note-form-title-input {
+  height: 45px;
+  background-color: rgba(207, 207, 207, 0.5);
+  font-size: 20px;
+  border-radius: 2px 2px 0 0;
+  border: 0;
+  border-bottom: 2px solid #fff;
+  outline: none;
+  width: 100%;
+  caret-color: #4285f4;
+}
+
+#note-form-title-input:focus {
+  border-bottom: 2px solid #4285f4;
+  transition: border-bottom 0.3s ease;
+}
+
+.note-form-bottom-buttons-div {
+  display: flex;
+  justify-content: flex-end;
+}
+.note-form-bottom-buttons {
+  background-color: white;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 50px;
+  height: 40px;
+  width: 100px;
+}
+#note-form-bottom-cancel-button:hover {
+  background-color: rgba(216, 216, 216, 0.5);
+  transition: background-color 0.3s ease;
+}
+#note-form-bottom-cancel-button:active {
+  background-color: rgba(162, 162, 162, 0.5);
+  transition: background-color 0.1s ease;
+}
+
+#note-form-bottom-submit-button {
+  background-color: #4285f4;
+  color: white;
+}
+#note-form-bottom-submit-button:hover {
+  background-color: #3180fe;
+  transition: background-color 0.3s ease;
+}
+
+#note-form-bottom-submit-button:active {
+  background-color: #176ffb;
+  transition: background-color 0s ease;
+}

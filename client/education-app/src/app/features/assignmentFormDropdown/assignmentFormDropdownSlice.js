@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const assignmentFormDropdownSlice = createSlice({
   name: "assignmentFormDropdownSlice",
   initialState: {
-    value: true,
+    value: false,
   },
   reducers: {
     setAssignmentFormDropdown: (state, action) => {

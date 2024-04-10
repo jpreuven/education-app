@@ -1,5 +1,40 @@
-.course-page-list-item-div:hover {
-  background-color: #eef7ff;
+.course-page-outer-div {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 30px;
+  justify-content: space-between;
+}
+.course-page-header {
+  margin-bottom: 10px;
+}
+.course-page-assignment-and-notes-div {
+  border: 2px solid rgb(224, 224, 224);
+  margin-bottom: 10px;
+}
+
+.course-page-assignment-and-notes-list-header {
+  padding: 0.5em;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
+  border-bottom: none;
+}
+.course-page-assignment-and-notes-list-header-expanded {
+  border-bottom: 2px solid rgb(224, 224, 224);
+}
+.course-page-assignment-and-notes-list-inner-div {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.course-page-assignment-and-notes-button-inner-div {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 85px;
+  position: relative;
 }
 
 .course-page-button:hover {
@@ -15,9 +50,8 @@
   font-size: 16px;
   font-weight: bold;
 }
-.assignment-list {
-  left: 865px;
-  top: 50px;
+.course-page-assignment-button-list {
+  margin-top: 10px;
   position: absolute;
   width: 200px;
   background-color: white;
@@ -25,12 +59,45 @@
     0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
   border-radius: 7px;
   padding: 10px 0;
+  color: black;
 }
 
-.assignment-list-item {
+.course-page-assignment-button-list-item {
   padding: 7px 10px;
   cursor: pointer;
 }
-.assignment-list-item:hover {
+.course-page-assignment-button-list-item:hover {
   background-color: #f4f4f4;
+}
+.course-page-assignment-and-notes-list-expanded {
+  display: flex;
+  flex-direction: column;
+}
+.course-page-assignment-and-notes-list {
+  display: none;
+}
+
+.course-page-list-item-div:hover {
+  background-color: #eef7ff;
+}
+.course-page-list-item-div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em;
+  border-top: 1px solid rgb(224, 224, 224);
+}
+.course-page-list-item-div-first-item {
+  border-top: none;
+}
+
+.course-page-student-list-outer-div {
+  max-width: 300px;
+  width: 100%;
+  max-height: 400px;
+}
+.course-page-student-list-inner-div {
+  height: 100%;
+  border: 2px solid rgb(224, 224, 224);
+  overflow: auto;
+  scrollbar-width: thin;
 }
