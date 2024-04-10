@@ -5,9 +5,7 @@
   padding: 30px;
   justify-content: space-between;
 }
-.course-page-header {
-  margin-bottom: 10px;
-}
+
 .course-page-assignment-and-notes-div {
   border: 2px solid rgb(224, 224, 224);
   margin-bottom: 10px;
@@ -50,25 +48,7 @@
   font-size: 16px;
   font-weight: bold;
 }
-.course-page-assignment-button-list {
-  margin-top: 10px;
-  position: absolute;
-  width: 200px;
-  background-color: white;
-  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 7px;
-  padding: 10px 0;
-  color: black;
-}
 
-.course-page-assignment-button-list-item {
-  padding: 7px 10px;
-  cursor: pointer;
-}
-.course-page-assignment-button-list-item:hover {
-  background-color: #f4f4f4;
-}
 .course-page-assignment-and-notes-list-expanded {
   display: flex;
   flex-direction: column;

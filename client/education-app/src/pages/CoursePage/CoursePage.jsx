@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setUser } from "../../app/features/users/userSlice";
-import { setAssignmentFormDropdown } from "../../app/features/assignmentFormDropdown/assignmentFormDropdownSlice";
-import accountLogo from "../../assets/account-logo.svg";
-import arrowRightLogo from "../../assets/arrow_right_logo.svg";
-import arrowDropLogo from "../../assets/arrow_drop_logo.svg";
-import addLogo from "../../assets/add_logo.svg";
 
 import "./CoursePage.css";
 import NoteFormModal from "./components/noteFormModal/NoteFormModal";
+import PageHeader from "./components/PageHeader/PageHeader";
+import AssignmentListHeader from "./components/AssignmentListHeader/AssignmentListHeader";
+import NoteListHeader from "./components/NoteListHeader/NoteListHeader";
+import StudentList from "./components/StudentList/StudentList";
 
 export default function Course() {
   const [assignmentDescription, setAssignmentDescription] = useState("");
@@ -113,39 +112,10 @@ export default function Course() {
   function handleNoteListToggle() {
     setExpandNoteList(!expandNoteList);
   }
-  function handleNewAssignmentButton() {
-    dispatch(setAssignmentFormDropdown(!assignmentFormDropdown));
-  }
+
   function handleNewNoteToggle() {
     setNoteFormToggle(!noteFormToggle);
   }
-
-  const studentList = students.map(
-    ({ email, first_name, last_name }, index) => {
-      return (
-        <div
-          key={index}
-          style={{
-            paddingBlock: ".65em",
-            border: "1px solid rgb(224,224,224)",
-            borderRadius: "10px",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={accountLogo}
-            style={{
-              paddingRight: "15px",
-            }}
-          />
-          <p>
-            {first_name} {last_name}
-          </p>
-        </div>
-      );
-    }
-  );
 
   const assignmentList = assignments.map(
     ({ description, title, due_date }, index) => {
@@ -179,62 +149,19 @@ export default function Course() {
     <div className="course-page-outer-div">
       {/* Left side of page, assignment + notes lists */}
       <div>
-        {/* Heading */}
-        <header className="course-page-header">
-          <h1>{course_title}</h1>
-          <p>{description}</p>
-          <p>
-            Start Date: {start_date} - End Date: {end_date}
-          </p>
-        </header>
+        <PageHeader
+          course_title={course_title}
+          description={description}
+          start_date={start_date}
+          end_date={end_date}
+        />
         {/* Assignment + notes lists */}
         <div className="course-page-assignment-and-notes-div">
-          {/* Assignment List Header */}
-          <div
-            className={`course-page-assignment-and-notes-list-header ${
-              expandAssignmentList
-                ? "course-page-assignment-and-notes-list-header-expanded"
-                : ""
-            }`}
-          >
-            <div
-              className="course-page-assignment-and-notes-list-inner-div"
-              onClick={handleAssignmentListToggle}
-            >
-              <img
-                src={expandAssignmentList ? arrowDropLogo : arrowRightLogo}
-              />
-              <h3>Assignments</h3>
-            </div>
-            {/* Create new assignment button */}
-            <button
-              className="course-page-button"
-              onClick={handleNewAssignmentButton}
-            >
-              <div className="course-page-assignment-and-notes-button-inner-div">
-                <img src={addLogo} />
-                <p>Create</p>
-              </div>
-              {/* Assignment list dropdown */}
-              {assignmentFormDropdown ? (
-                <div className="course-page-assignment-button-list">
-                  <div className="course-page-assignment-button-list-item">
-                    Classwork
-                  </div>
-                  <div className="course-page-assignment-button-list-item">
-                    Homework
-                  </div>
-                  <div className="course-page-assignment-button-list-item">
-                    Quiz
-                  </div>
-                  <div className="course-page-assignment-button-list-item">
-                    Test
-                  </div>
-                </div>
-              ) : null}
-            </button>
-          </div>
-          {/* Assignment List */}
+          <AssignmentListHeader
+            expandAssignmentList={expandAssignmentList}
+            handleAssignmentListToggle={handleAssignmentListToggle}
+            assignmentFormDropdown={assignmentFormDropdown}
+          />
           <div
             className={`course-page-assignment-and-notes-list${
               expandAssignmentList ? "-expanded" : ""
@@ -245,31 +172,11 @@ export default function Course() {
         </div>
         {/* Note Header */}
         <div className="course-page-assignment-and-notes-div">
-          <div
-            className={`course-page-assignment-and-notes-list-header ${
-              expandNoteList
-                ? "course-page-assignment-and-notes-list-header-expanded"
-                : ""
-            }`}
-          >
-            <div
-              className="course-page-assignment-and-notes-list-inner-div"
-              onClick={handleNoteListToggle}
-            >
-              <img src={expandNoteList ? arrowDropLogo : arrowRightLogo} />
-              <h3>Notes</h3>
-            </div>
-            {/* Note Button */}
-            <button
-              className="course-page-button"
-              onClick={handleNewNoteToggle}
-            >
-              <div className="course-page-assignment-and-notes-button-inner-div">
-                <img src={addLogo} />
-                Create
-              </div>
-            </button>
-          </div>
+          <NoteListHeader
+            expandNoteList={expandNoteList}
+            handleNewNoteToggle={handleNewNoteToggle}
+            handleNoteListToggle={handleNoteListToggle}
+          />
           {/* Note List */}
           <div
             className={`course-page-assignment-and-notes-list${
@@ -283,13 +190,7 @@ export default function Course() {
           ) : null}
         </div>
       </div>
-      <div className="course-page-student-list-outer-div">
-        <h3>Students:</h3>
-        <div className="course-page-student-list-inner-div">
-          {studentList}
-          {studentList}
-        </div>
-      </div>
+      <StudentList students={students} />
     </div>
   );
 }

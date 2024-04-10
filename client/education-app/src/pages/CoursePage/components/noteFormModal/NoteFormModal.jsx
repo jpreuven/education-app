@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./NoteFormModal.css";
+import closeLogo from "../../../../assets/close_logo.svg";
 
 export default function NoteFormModal({ handleNewNoteToggle }) {
   const [noteText, setNoteText] = useState("");
@@ -17,7 +18,7 @@ export default function NoteFormModal({ handleNewNoteToggle }) {
         <header className="note-form-modal-header">
           <p>Create a New Set of Notes</p>
           <div className="note-form-modal-cancel" onClick={handleNewNoteToggle}>
-            X
+            <img src={closeLogo} />
           </div>
         </header>
         <input
