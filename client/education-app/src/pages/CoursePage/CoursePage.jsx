@@ -12,6 +12,8 @@ import StudentList from "./components/StudentList/StudentList";
 import GoogleLoginButton from "../../components/GoogleLoginButton/GoogleLoginButton";
 import GoogleLogoutButton from "../../components/GoogleLogoutButton/GoogleLogoutButton";
 import { gapi } from "gapi-script";
+import AssignmentList from "./components/AssignmentList/AssignmentList";
+import NotesList from "./components/NotesList/NotesList";
 
 const SCOPES = "https://www.googleapis.com/auth/drive";
 
@@ -133,34 +135,6 @@ export default function Course() {
     setNoteFormToggle(!noteFormToggle);
   }
 
-  const assignmentList = assignments.map(
-    ({ description, title, due_date }, index) => {
-      return (
-        <div
-          className={`course-page-list-item-div ${
-            index == 0 ? "course-page-list-item-div-first-item" : ""
-          }`}
-          key={index}
-        >
-          <p style={{ font: "20px", fontWeight: "bold" }}>{title}</p>
-          <p style={{ font: "12px" }}>{due_date}</p>
-        </div>
-      );
-    }
-  );
-  const teacherNotesList = teacher_notes.map(({ note_text }, index) => {
-    return (
-      <div
-        className={`course-page-list-item-div ${
-          index == 0 ? "course-page-list-item-div-first-item" : ""
-        }`}
-        key={index}
-      >
-        <p style={{ font: "20px", fontWeight: "bold" }}>{note_text}</p>
-      </div>
-    );
-  });
-
   return (
     <div className="course-page-outer-div">
       {/* Left side of page, assignment + notes lists */}
@@ -178,13 +152,10 @@ export default function Course() {
             handleAssignmentListToggle={handleAssignmentListToggle}
             assignmentFormDropdown={assignmentFormDropdown}
           />
-          <div
-            className={`course-page-assignment-and-notes-list${
-              expandAssignmentList ? "-expanded" : ""
-            }`}
-          >
-            {assignmentList}
-          </div>
+          <AssignmentList
+            assignments={assignments}
+            expandAssignmentList={expandAssignmentList}
+          />
         </div>
         {/* Note Header */}
         <div className="course-page-assignment-and-notes-div">
@@ -194,13 +165,10 @@ export default function Course() {
             handleNoteListToggle={handleNoteListToggle}
           />
           {/* Note List */}
-          <div
-            className={`course-page-assignment-and-notes-list${
-              expandNoteList ? "-expanded" : ""
-            }`}
-          >
-            {teacherNotesList}
-          </div>
+          <NotesList
+            teacher_notes={teacher_notes}
+            expandNoteList={expandNoteList}
+          />
           {noteFormToggle ? (
             <NoteFormModal handleNewNoteToggle={handleNewNoteToggle} />
           ) : null}
