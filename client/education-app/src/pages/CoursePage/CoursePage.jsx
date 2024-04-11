@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setUser } from "../../app/features/users/userSlice";
@@ -9,6 +9,11 @@ import PageHeader from "./components/PageHeader/PageHeader";
 import AssignmentListHeader from "./components/AssignmentListHeader/AssignmentListHeader";
 import NoteListHeader from "./components/NoteListHeader/NoteListHeader";
 import StudentList from "./components/StudentList/StudentList";
+import GoogleLoginButton from "../../components/GoogleLoginButton/GoogleLoginButton";
+import GoogleLogoutButton from "../../components/GoogleLogoutButton/GoogleLogoutButton";
+import { gapi } from "gapi-script";
+
+const SCOPES = "https://www.googleapis.com/auth/drive";
 
 export default function Course() {
   const [assignmentDescription, setAssignmentDescription] = useState("");
@@ -36,6 +41,17 @@ export default function Course() {
   } = userData.courses.filter((course) => {
     return course.course_id == id;
   })[0];
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+        clientId: import.meta.env.VITE_CLIENT_ID,
+        scope: SCOPES,
+      });
+    }
+    gapi.load("client:auth2", start);
+  }, []);
 
   function handleNewAssignment(e) {
     e.preventDefault();
@@ -188,6 +204,10 @@ export default function Course() {
           {noteFormToggle ? (
             <NoteFormModal handleNewNoteToggle={handleNewNoteToggle} />
           ) : null}
+        </div>
+        <div>
+          <GoogleLoginButton />
+          <GoogleLogoutButton />
         </div>
       </div>
       <StudentList students={students} />
