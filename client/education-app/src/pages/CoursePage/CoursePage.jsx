@@ -135,6 +135,21 @@ export default function Course() {
     setNoteFormToggle(!noteFormToggle);
   }
 
+  function createFile(tag) {
+    const accessToken = gapi.auth.getToken().access_token;
+
+    fetch("https://docs.googleapis.com/v1/documents?title=" + tag, {
+      method: "POST",
+      headers: new Headers({ Authorization: "Bearer " + accessToken }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }
+
   return (
     <div className="course-page-outer-div">
       {/* Left side of page, assignment + notes lists */}
@@ -176,6 +191,7 @@ export default function Course() {
         <div>
           <GoogleLoginButton />
           <GoogleLogoutButton />
+          <button onClick={() => createFile("testing")}>Testing</button>
         </div>
       </div>
       <StudentList students={students} />
