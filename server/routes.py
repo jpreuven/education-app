@@ -142,9 +142,13 @@ class TeacherNotes(Resource):
         data = request.get_json()
         teacher_id = data["teacher_id"]
         course_id = data["course_id"]
-        note_text = data["note_text"]
+        title = data["title"]
+        google_id = data["google_id"]
+        description = None
+        if data.get("description"):
+            description = data["description"]
         try:
-            new_teacher_note = TeacherNote(course_id=course_id, teacher_id=teacher_id, note_text=note_text)
+            new_teacher_note = TeacherNote(course_id=course_id, teacher_id=teacher_id, title=title, description=description, google_id=google_id)
         except ValueError as e:
             abort(422, e.args[0])
         db.session.add(new_teacher_note)
@@ -163,3 +167,50 @@ api.add_resource(TeacherNotes, "/teachernotes")
 #         return make_response(enrollments, 200)
     
 # api.add_resource(Enrollments, "/enrollments")
+
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+from googleapiclient.errors import HttpError
+import uuid
+import requests
+
+SCOPES = ["https://www.googleapis.com/auth/drive"]
+SERVICE_ACCOUNT_FILE = "service_account.json"
+PARENT_FOLDER_ID = "1A6kgUioZMHgQ3H7VkHfp3aFb9HWIt7_p"
+def authenticate():
+    creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    return creds
+
+class CreateGoogleDoc(Resource):
+    def post(self):
+        creds = authenticate()
+        service = build("drive", "v3", credentials=creds)
+        data = request.get_json()
+
+        file_metadata = {
+            "name" : data["note_title"],
+            "parents" : [PARENT_FOLDER_ID],
+            "mimeType": "application/vnd.google-apps.document"
+        }
+        file = service.files().create(body=file_metadata).execute()
+        google_id = file.get("id")
+        print("Google Doc created with ID:", google_id)
+
+        teacher_id = data["teacher_id"]
+        course_id = data["course_id"]
+        title = data["note_title"]
+        description = None
+        if data.get("note_description"):
+            description = data["note_description"]
+        try:
+            new_teacher_note = TeacherNote(course_id=course_id, teacher_id=teacher_id, title=title, description=description, google_id=google_id)
+        except ValueError as e:
+            abort(422, e.args[0])
+        db.session.add(new_teacher_note)
+        db.session.commit()
+        return make_response(new_teacher_note.to_dict(), 201)
+
+        # return {"id": file.get("id")}, 201
+    
+    
+api.add_resource(CreateGoogleDoc, "/create-google-doc")

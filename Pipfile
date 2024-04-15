@@ -13,6 +13,9 @@ sqlalchemy-serializer = "*"
 flask-bcrypt = "*"
 bcrypt = "*"
 faker = "*"
+google-api-python-client = "*"
+flask-socketio = "*"
+google-auth = "*"
 
 [dev-packages]
 

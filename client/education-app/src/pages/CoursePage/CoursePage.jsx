@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { setUser } from "../../app/features/users/userSlice";
+import io from "socket.io-client";
 
 import "./CoursePage.css";
 import NoteFormModal from "./components/noteFormModal/NoteFormModal";
@@ -17,14 +18,41 @@ import NotesList from "./components/NotesList/NotesList";
 
 const SCOPES = "https://www.googleapis.com/auth/drive";
 
+const BackendURL = "http://localhost:5000";
+
 export default function Course() {
   const [assignmentDescription, setAssignmentDescription] = useState("");
   const [assignmentTitle, setAssignmentTitle] = useState("");
   const [assignmentDate, setAssignmentDate] = useState("");
-  const [noteFormToggle, setNoteFormToggle] = useState(true);
-  const [noteText, setNoteText] = useState("");
   const [expandAssignmentList, setExpandAssignmentList] = useState(true);
+
+  const [noteFormToggle, setNoteFormToggle] = useState(true);
+  // const [noteTitle, setNoteTitle] = useState("");
+  // const [noteDescription, setNoteDescription] = useState("");
   const [expandNoteList, setExpandNoteList] = useState(true);
+
+  // const [fileChanges, setFileChanges] = useState([]);
+
+  // useEffect(() => {
+  //   const socket = io(BackendURL);
+
+  //   socket.on("connect", () => {
+  //     console.log("Connected to backend via WebSocket");
+  //   });
+
+  //   socket.on("disconnect", () => {
+  //     console.log("Disconnected from backend");
+  //   });
+
+  //   socket.on("file_change", (data) => {
+  //     console.log("File change detected:", data);
+  //     setFileChanges((prevChanges) => [...prevChanges, data]);
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -95,7 +123,8 @@ export default function Course() {
     const obj = {
       teacher_id: userData.id,
       course_id: id,
-      note_text: noteText,
+      note_title: noteTitle,
+      note_description: noteDescription,
     };
     fetch("http://localhost:5000/teachernotes", {
       method: "POST",
@@ -116,7 +145,7 @@ export default function Course() {
               note_id: data.note_id,
               teacher_id: data.teacher_id,
               course_id: id,
-              note_text: data.note_text,
+              note_title: data.note_title,
             });
           console.log(new_user);
           dispatch(setUser(new_user));
@@ -135,18 +164,44 @@ export default function Course() {
     setNoteFormToggle(!noteFormToggle);
   }
 
-  function createFile(tag) {
+  // function createFile(e) {
+  //   e.preventDefault();
+  //   const obj = {
+  //     teacher_id: userData.id,
+  //     course_id: id,
+  //     note_title: noteTitle,
+  //   };
+  //   const accessToken = gapi.auth.getToken().access_token;
+  //   fetch("https://5380-76-91-21-90.ngrok-free.app/create-google-doc", {
+  //     method: "POST",
+  //     headers: new Headers({ Authorization: "Bearer " + accessToken }),
+  //     body: JSON.stringify(obj),
+  //   })
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((data) => {
+  //       console.log(data);
+  //     });
+  // }
+  function fetchTitle(id) {
     const accessToken = gapi.auth.getToken().access_token;
-
-    fetch("https://docs.googleapis.com/v1/documents?title=" + tag, {
-      method: "POST",
+    fetch(`https://docs.googleapis.com/v1/documents/${id}}`, {
       headers: new Headers({ Authorization: "Bearer " + accessToken }),
     })
-      .then((res) => {
-        return res.json();
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
       })
       .then((data) => {
+        // Handle the fetched document data
         console.log(data);
+        data["id"];
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
       });
   }
 
@@ -185,13 +240,28 @@ export default function Course() {
             expandNoteList={expandNoteList}
           />
           {noteFormToggle ? (
-            <NoteFormModal handleNewNoteToggle={handleNewNoteToggle} />
+            <NoteFormModal
+              handleNewNoteToggle={handleNewNoteToggle}
+              course_id={id}
+              userData={userData}
+            />
           ) : null}
         </div>
         <div>
           <GoogleLoginButton />
           <GoogleLogoutButton />
-          <button onClick={() => createFile("testing")}>Testing</button>
+          {/* <button onClick={() => createFile("testing")}>Testing</button> */}
+
+          {/* <div>
+            <h1>File Name Change Notifier</h1>
+            <ul>
+              {fileChanges.map((change, index) => (
+                <li key={index}>
+                  File ID: {change.file_id}, New Name: {change.new_name}
+                </li>
+              ))}
+            </ul>
+          </div> */}
         </div>
       </div>
       <StudentList students={students} />

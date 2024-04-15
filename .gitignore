@@ -26,3 +26,5 @@ dist-ssr
 .env
 
 *.db
+
+service_account.json

@@ -190,7 +190,9 @@ class TeacherNote(db.Model, SerializerMixin):
     note_id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.teacher_id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
-    note_text = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    google_id = db.Column(db.String, nullable=False)
     teacher = db.relationship("Teacher", back_populates="teacher_notes")
     course = db.relationship("Course", back_populates="teacher_notes")
 
