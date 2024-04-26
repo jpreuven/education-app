@@ -157,7 +157,24 @@ class TeacherNotes(Resource):
     
 api.add_resource(TeacherNotes, "/teachernotes")
 
+class TeacherNoteResource(Resource):
+    def patch(self, note_id):
+        data = request.get_json()
+        title = data.get("title")
 
+        if not title:
+            abort(400, message="Title is required")
+
+        teacher_note = TeacherNote.query.get(note_id)
+        if not teacher_note:
+            abort(404, message="Teacher note not found")
+
+        teacher_note.title = title
+        db.session.commit()
+
+        return make_response(teacher_note.to_dict(), 200)
+
+api.add_resource(TeacherNoteResource, "/teachernotes/<int:note_id>")
 
 
 # class Enrollments(Resource):

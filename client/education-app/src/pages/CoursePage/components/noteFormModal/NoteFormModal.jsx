@@ -28,7 +28,7 @@ export default function NoteFormModal({
       note_description: noteDescription,
     };
     const accessToken = gapi.auth.getToken().access_token;
-    fetch("https://5380-76-91-21-90.ngrok-free.app/create-google-doc", {
+    fetch("https://5bdb-174-193-131-57.ngrok-free.app/create-google-doc", {
       method: "POST",
       headers: new Headers({
         Authorization: "Bearer " + accessToken,

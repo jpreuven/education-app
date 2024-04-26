@@ -25,34 +25,8 @@ export default function Course() {
   const [assignmentTitle, setAssignmentTitle] = useState("");
   const [assignmentDate, setAssignmentDate] = useState("");
   const [expandAssignmentList, setExpandAssignmentList] = useState(true);
-
   const [noteFormToggle, setNoteFormToggle] = useState(true);
-  // const [noteTitle, setNoteTitle] = useState("");
-  // const [noteDescription, setNoteDescription] = useState("");
   const [expandNoteList, setExpandNoteList] = useState(true);
-
-  // const [fileChanges, setFileChanges] = useState([]);
-
-  // useEffect(() => {
-  //   const socket = io(BackendURL);
-
-  //   socket.on("connect", () => {
-  //     console.log("Connected to backend via WebSocket");
-  //   });
-
-  //   socket.on("disconnect", () => {
-  //     console.log("Disconnected from backend");
-  //   });
-
-  //   socket.on("file_change", (data) => {
-  //     console.log("File change detected:", data);
-  //     setFileChanges((prevChanges) => [...prevChanges, data]);
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
 
   const { id } = useParams();
   const dispatch = useDispatch();
