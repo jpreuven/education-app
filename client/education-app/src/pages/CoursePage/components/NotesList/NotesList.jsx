@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { gapi } from "gapi-script";
+import { setUser } from "../../../../app/features/users/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function NotesList({ teacher_notes, expandNoteList }) {
-  function updateNoteTitle(newTitle, title, note_id) {
-    document.querySelector(`#course-page-title-${title}`).textContent =
-      newTitle;
+export default function NotesList({ expandNoteList }) {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.value);
+  const teacher_notes = userData.teacher_notes;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      teacher_notes.forEach(({ title, google_id, note_id }) => {
+        checkTitle(title, google_id, note_id);
+      });
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [teacher_notes]);
+
+  function updateNoteTitle(newTitle, note_id) {
     fetch(`http://localhost:5000/teachernotes/${note_id}`, {
       method: "PATCH",
       headers: {
@@ -18,7 +32,21 @@ export default function NotesList({ teacher_notes, expandNoteList }) {
         }
         return response.json();
       })
-      .then((data) => {})
+      .then((data) => {
+        const newUser = JSON.parse(JSON.stringify(userData));
+        const newTeacherNotes = newUser.teacher_notes;
+        const indexOfNoteToUpdate = newTeacherNotes.findIndex(
+          (note) => note.note_id === data.note_id
+        );
+        console.log(indexOfNoteToUpdate);
+        if (indexOfNoteToUpdate !== -1) {
+          newTeacherNotes[indexOfNoteToUpdate].title = data.title;
+        } else {
+          console.log("not working");
+        }
+        newUser.teacher_notes = newTeacherNotes;
+        dispatch(setUser(newUser));
+      })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
@@ -38,7 +66,7 @@ export default function NotesList({ teacher_notes, expandNoteList }) {
       .then((data) => {
         if (data.title !== title) {
           console.log("different!");
-          updateNoteTitle(data.title, title, note_id);
+          updateNoteTitle(data.title, note_id);
         }
       })
       .catch((error) => {
@@ -70,9 +98,9 @@ export default function NotesList({ teacher_notes, expandNoteList }) {
               </span>
             </p>
           </a>
-          <button onClick={() => checkTitle(title, google_id, note_id)}>
+          {/* <button onClick={() => checkTitle(title, google_id, note_id)}>
             Click me
-          </button>
+          </button> */}
         </div>
       );
     }

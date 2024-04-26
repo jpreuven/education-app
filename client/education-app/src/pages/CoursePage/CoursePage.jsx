@@ -210,7 +210,7 @@ export default function Course() {
           />
           {/* Note List */}
           <NotesList
-            teacher_notes={teacher_notes}
+            // teacher_notes={teacher_notes}
             expandNoteList={expandNoteList}
           />
           {noteFormToggle ? (
